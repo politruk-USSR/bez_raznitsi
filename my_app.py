@@ -1,43 +1,53 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import(
-    QApplication,QWidget,
-    QPushButton,QLabel,
-    QVBoxLayout, QHBoxLayout)
+from PyQt5.QtCore import Qt, QTimer, QTime, QLocale
+from PyQt5.QtGui import QDoubleValidator, QIntValidator, QFont # проверка типов вводимых значений
+from PyQt5.QtWidgets import (
+        QApplication, QWidget, 
+        QHBoxLayout, QVBoxLayout, QGridLayout, 
+        QGroupBox, QRadioButton,
+        QPushButton, QLabel, QListWidget, QLineEdit)
 
-from second_win import TestWin
 from instr import *
+from second_win import *
 
-
+       
 class MainWin(QWidget):
     def __init__(self):
+        ''' окно, в котором располагается приветствие '''
         super().__init__()
 
+        # создаём и настраиваем графические эелементы:
         self.initUI()
-        self.set_appear()
+
+        #устанавливает связи между элементами
         self.connects()
+
+        #устанавливает, как будет выглядеть окно (надпись, размер, место)
+        self.set_appear()
+
+        # старт:
         self.show()
 
     def initUI(self):
-        self.text1 = QLabel(txt_hello)
-        self.text2 = QLabel(txt_instruction)
+        ''' создает графические элементы '''
+        self.btn_next = QPushButton(txt_next, self)
+        self.hello_text = QLabel(txt_hello)
+        self.instruction = QLabel(txt_instruction)
 
-        self.bn = QPushButton(txt_next)
+        self.layout_line = QVBoxLayout()
+        self.layout_line.addWidget(self.hello_text, alignment = Qt.AlignLeft)
+        self.layout_line.addWidget(self.instruction, alignment = Qt.AlignLeft) 
+        self.layout_line.addWidget(self.btn_next, alignment = Qt.AlignCenter)          
+        self.setLayout(self.layout_line)
 
-        self.v_line = QVBoxLayout()
-        
-        self.v_line.addWidget(self.text1, alignment=Qt.AlignLeft)
-        self.v_line.addWidget(self.text2, alignment=Qt.AlignLeft)
-        self.v_line.addWidget(self.bn, alignment=Qt.AlignCenter)
-
-        self.setLayout(self.v_line)
-
+    
     def next_click(self):
         self.tw = TestWin()
         self.hide()
-        
-    def connects(self):
-        self.bn.clicked.connect(self.next_click)
 
+    def connects(self):
+        self.btn_next.clicked.connect(self.next_click)
+
+    ''' устанавливает, как будет выглядеть окно (надпись, размер, место) '''
     def set_appear(self):
         self.setWindowTitle(txt_title)
         self.resize(win_width, win_height)
